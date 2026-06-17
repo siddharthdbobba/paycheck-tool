@@ -2,6 +2,7 @@ import type { PaycheckResult, Product } from '@/lib/calc/types'
 import Disclaimer from './Disclaimer'
 import Disclosure from './Disclosure'
 import ProductCard from './ProductCard'
+import EmailCapture from './EmailCapture'
 
 interface ResultsProps {
   result: PaycheckResult
@@ -75,6 +76,9 @@ export default function Results({ result, products }: ResultsProps) {
           ))}
         </div>
       )}
+
+      {/* Email Capture */}
+      <EmailCapture />
 
       {/* Disclosures */}
       <div className="border-t border-zinc-100 pt-4">

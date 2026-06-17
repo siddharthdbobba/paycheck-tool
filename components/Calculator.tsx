@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { PaycheckInput, PaycheckResult, Product } from '@/lib/calc/types'
 import { buildResult, rankProducts } from '@/lib/calc/recommend'
 import Results from './Results'
+import { track } from '@/lib/analytics'
 
 const US_STATES = [
   ['AL', 'Alabama'], ['AK', 'Alaska'], ['AZ', 'Arizona'], ['AR', 'Arkansas'],
@@ -45,6 +46,7 @@ export default function Calculator() {
     const result = buildResult(input)
     const products = rankProducts(input)
     setCalc({ status: 'done', result, products })
+    track('calc_completed', { salary: input.grossAnnual, state: input.state })
   }
 
   return (
