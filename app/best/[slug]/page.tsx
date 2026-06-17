@@ -48,10 +48,59 @@ export default async function BestPage({ params }: BestPageProps) {
           <Disclosure />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Comparison Table */}
+        <div className="mb-10 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-zinc-200 bg-zinc-50">
+                <th className="px-4 py-3 text-left font-semibold text-zinc-700">Feature</th>
+                {products.map((product) => (
+                  <th key={product.id} className="px-4 py-3 text-left font-semibold text-zinc-700">
+                    {product.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-100">
+              <tr>
+                <td className="px-4 py-3 font-medium text-zinc-600">Best For</td>
+                {products.map((product) => (
+                  <td key={product.id} className="px-4 py-3 text-zinc-800">{product.blurb}</td>
+                ))}
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-medium text-zinc-600">Key Perks</td>
+                {products.map((product) => (
+                  <td key={product.id} className="px-4 py-3">
+                    <ul className="list-inside list-disc text-xs text-zinc-700">
+                      {product.highlights.slice(0, 3).map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-medium text-zinc-600">Payout</td>
+                {products.map((product) => (
+                  <td key={product.id} className="px-4 py-3 text-xs text-zinc-500">{product.payoutNote}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Product Cards (detailed) */}
+        <div className="space-y-6">
+          <h2 className="text-lg font-semibold text-zinc-900">Detailed Breakdown</h2>
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+        </div>
+
+        {/* Footer Disclosure */}
+        <div className="mt-10 border-t border-zinc-100 pt-4">
+          <Disclosure />
         </div>
       </main>
     </div>

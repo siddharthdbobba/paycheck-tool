@@ -32,8 +32,8 @@ describe('/best/[slug]', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: comparison.title })).toBeTruthy()
     expect(screen.getByText(comparison.intro)).toBeTruthy()
-    expect(screen.getByText(COPY.disclosure)).toBeTruthy()
-    expect(screen.getByText(categoryProducts[0].name)).toBeTruthy()
+    expect(screen.getAllByText(COPY.disclosure).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText(categoryProducts[0].name).length).toBeTruthy()
     expect(screen.queryByText(excludedProduct.name)).toBeNull()
   })
 })
