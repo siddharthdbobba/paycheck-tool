@@ -3,9 +3,9 @@ import { federalIncomeTax, ficaTax, stateTax, takeHome } from '@/lib/calc/tax'
 
 describe('federalIncomeTax', () => {
   it('applies brackets progressively after standard deduction', () => {
-    // taxable income (already post-deduction) of 40000:
-    // 10% * 11925 + 12% * (40000 - 11925) = 1192.5 + 3369 = 4561.5
-    expect(federalIncomeTax(40000)).toBeCloseTo(4561.5, 1)
+    // taxable income (already post-deduction) of 40000, 2026 brackets:
+    // 10% * 12400 + 12% * (40000 - 12400) = 1240 + 3312 = 4552
+    expect(federalIncomeTax(40000)).toBeCloseTo(4552, 1)
   })
   it('is zero at or below zero taxable', () => {
     expect(federalIncomeTax(0)).toBe(0)

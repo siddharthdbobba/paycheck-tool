@@ -1,25 +1,26 @@
 export const TAX_YEAR = 2026
 
-// Single filer. Verify annually at irs.gov before launch.
-export const STANDARD_DEDUCTION_2026 = 15000
+// Single filer, tax year 2026. Source: IRS Rev. Proc. 2025-32 + OBBBA, SSA.
+// Verify annually at irs.gov / ssa.gov before each launch.
+export const STANDARD_DEDUCTION_2026 = 16100
 
 export const FEDERAL_BRACKETS_2026 = [
-  { upTo: 11925, rate: 0.10 },
-  { upTo: 48475, rate: 0.12 },
-  { upTo: 103350, rate: 0.22 },
-  { upTo: 197300, rate: 0.24 },
-  { upTo: 250525, rate: 0.32 },
-  { upTo: 626350, rate: 0.35 },
+  { upTo: 12400, rate: 0.10 },
+  { upTo: 50400, rate: 0.12 },
+  { upTo: 105700, rate: 0.22 },
+  { upTo: 201775, rate: 0.24 },
+  { upTo: 256225, rate: 0.32 },
+  { upTo: 640600, rate: 0.35 },
   { upTo: Infinity, rate: 0.37 },
 ] as const
 
 export const FICA = {
   socialSecurityRate: 0.062,
-  socialSecurityWageBase: 176100, // verify annually (SSA)
+  socialSecurityWageBase: 184500, // 2026 OASDI wage base (SSA); verify annually
   medicareRate: 0.0145,
 } as const
 
-export const ROTH_LIMIT_2026 = 7000 // under-50 limit, verify annually
+export const ROTH_LIMIT_2026 = 7500 // 2026 under-50 limit (IRS); verify annually
 
 // Approximate effective state income tax rates for an estimate only.
 // 0 for no-income-tax states. Verify/expand as needed.
