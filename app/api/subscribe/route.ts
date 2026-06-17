@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    await trackServer('email_captured', { source: source || 'calculator' })
+    const distinctId = req.headers.get('X-POSTHOG-DISTINCT-ID') ?? email
+    await trackServer('email_captured', { source: source || 'calculator', email }, distinctId)
 
     return NextResponse.json({ ok: true, id: subscriber.id })
   } catch (err) {

@@ -6,9 +6,17 @@ import { productsForCategory } from '@/lib/data/products'
 
 const PER_YEAR = { weekly: 52, biweekly: 26, semimonthly: 24, monthly: 12 } as const
 
+// The homepage calculator surfaces one "first paycheck" essential per core
+// category. Newer categories (budgeting, investing, insurance) have their own
+// dedicated /best comparison pages, so they're intentionally not ranked on the
+// homepage — but rankProducts falls back to the first product per category and
+// drops any category that has no products yet, so extending this list is safe.
+const RANKED_CATEGORIES: Product['category'][] = ['savings', 'brokerage', 'card']
+
 export function rankProducts(_input: PaycheckInput): Product[] {
-  const order: Product['category'][] = ['savings', 'brokerage', 'card']
-  return order.map((c) => productsForCategory(c)[0]).filter(Boolean) as Product[]
+  return RANKED_CATEGORIES
+    .map((category) => productsForCategory(category)[0])
+    .filter(Boolean) as Product[]
 }
 
 export function buildResult(input: PaycheckInput): PaycheckResult {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Disclosure from '@/components/Disclosure'
+import { trackServer } from '@/lib/analytics-server'
 
 export const metadata: Metadata = {
   title: 'Your First Paycheck: Complete Checklist for 2026 — What to Do Step by Step',
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
     'Got your first real paycheck? Here\'s exactly what to do: check your stub, set up your 401k, open a Roth IRA, build a budget, and start investing. No fluff, just the steps.',
 }
 
-export default function FirstPaycheckGuidePage() {
+export default async function FirstPaycheckGuidePage() {
+  await trackServer('checklist_viewed')
+
   return (
     <div className="min-h-screen bg-zinc-50 font-sans">
       <main className="mx-auto max-w-2xl px-4 py-10">

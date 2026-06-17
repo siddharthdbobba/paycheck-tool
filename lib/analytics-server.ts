@@ -1,36 +1,23 @@
-/**
- * Server-side analytics. Import in API routes and server components.
- * Uses the PostHog Node SDK when key is configured; otherwise no-ops.
- */
+import { PostHog } from 'posthog-node'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let posthogNode: any = null
+let posthogClient: PostHog | null = null
 
-async function getNodeClient() {
-  if (posthogNode) return posthogNode
-  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY
-  if (!key) return null
-  try {
-    const { PostHog } = await import('posthog-node')
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    posthogNode = new PostHog(key, { host: 'https://app.posthog.com' })
-    return posthogNode
-  } catch {
-    console.warn('[analytics-server] posthog-node not installed')
-    return null
+export function getPostHogClient(): PostHog {
+  if (!posthogClient) {
+    posthogClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN!, {
+      host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+      flushAt: 1,
+      flushInterval: 0,
+    })
   }
+  return posthogClient
 }
 
-export async function trackServer(event: string, props?: Record<string, unknown>) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  if (posthogNode) {
-    posthogNode.capture({ event, distinctId: 'server', properties: props })
-  } else {
-    const client = await getNodeClient()
-    if (client) {
-      client.capture({ event, distinctId: 'server', properties: props })
-    } else {
-      console.debug('[analytics-server] skipped:', event, props)
-    }
-  }
+export async function trackServer(
+  event: string,
+  props?: Record<string, unknown>,
+  distinctId = 'server',
+) {
+  const client = getPostHogClient()
+  client.capture({ distinctId, event, properties: props })
 }

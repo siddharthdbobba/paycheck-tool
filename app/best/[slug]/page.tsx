@@ -4,6 +4,7 @@ import Disclosure from '@/components/Disclosure'
 import ProductCard from '@/components/ProductCard'
 import { COMPARISONS, getComparison } from '@/lib/data/comparisons'
 import { productsForCategory } from '@/lib/data/products'
+import { trackServer } from '@/lib/analytics-server'
 
 type BestPageProps = {
   params: Promise<{ slug: string }>
@@ -36,6 +37,8 @@ export default async function BestPage({ params }: BestPageProps) {
   }
 
   const products = productsForCategory(comparison.category)
+
+  await trackServer('best_page_viewed', { slug, category: comparison.category, product_count: products.length })
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans">

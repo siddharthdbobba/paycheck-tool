@@ -1,4 +1,7 @@
+'use client'
+
 import type { Product } from '@/lib/calc/types'
+import { track } from '@/lib/analytics'
 
 interface ProductCardProps {
   product: Product
@@ -26,6 +29,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         href={`/go/${product.id}`}
         rel="sponsored nofollow"
         target="_blank"
+        onClick={() => track('product_link_clicked', { product_id: product.id, product_name: product.name, category: product.category })}
         className="mt-3 inline-block w-full rounded-md bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-indigo-700"
       >
         Learn More

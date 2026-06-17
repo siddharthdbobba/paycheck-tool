@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import posthog from 'posthog-js'
 import { track } from '@/lib/analytics'
 
 type Status = { type: 'idle' } | { type: 'loading' } | { type: 'success' } | { type: 'error'; message: string }
@@ -14,9 +15,16 @@ export default function EmailCapture() {
     setStatus({ type: 'loading' })
 
     try {
+      const distinctId = posthog.get_distinct_id()
+      const sessionId = posthog.get_session_id()
+
       const res = await fetch('/api/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(distinctId && { 'X-POSTHOG-DISTINCT-ID': distinctId }),
+          ...(sessionId && { 'X-POSTHOG-SESSION-ID': sessionId }),
+        },
         body: JSON.stringify({ email, source: 'calculator' }),
       })
       const data = await res.json()
@@ -26,6 +34,7 @@ export default function EmailCapture() {
         return
       }
 
+      posthog.identify(email, { email })
       track('email_submitted', { source: 'calculator' })
       setStatus({ type: 'success' })
     } catch {

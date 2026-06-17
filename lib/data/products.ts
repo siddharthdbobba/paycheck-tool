@@ -72,6 +72,72 @@ export const PRODUCTS: Product[] = [
     highlights: ['No annual fee', '3% in category of your choice', 'Online banking bonus', 'Preferred Rewards boost'],
     affiliateUrl: 'https://AFFILIATE_REPLACE/bofa-customized', payoutNote: '~$50-100 approval',
   },
+
+  // === Budgeting ===
+  {
+    id: 'budgeting-ynab', category: 'budgeting', name: 'YNAB (You Need A Budget)',
+    blurb: 'Zero-based budgeting that helps you give every dollar a job.',
+    highlights: ['$14.99/mo (free for students 1 year)', 'Zero-based budgeting method', 'Bank sync + goal tracking', 'Best-in-class teaching content'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/ynab', payoutNote: '~$6 per trial start',
+  },
+  {
+    id: 'budgeting-everydollar', category: 'budgeting', name: 'EveryDollar',
+    blurb: 'Simple, free zero-based budget app from Ramsey Solutions.',
+    highlights: ['Free plan available', 'Quick monthly budget setup', 'Clean, beginner-friendly UI', 'Premium adds bank sync'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/everydollar', payoutNote: 'varies',
+  },
+  {
+    id: 'budgeting-monarch', category: 'budgeting', name: 'Monarch Money',
+    blurb: 'All-in-one budgeting and net-worth tracking — a Mint replacement.',
+    highlights: ['$14.99/mo (or $99.99/yr)', 'Tracks all accounts in one place', 'Net worth + investment tracking', 'Couples-friendly shared budgets'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/monarch', payoutNote: '~$10 per trial start',
+  },
+  {
+    id: 'budgeting-rocketmoney', category: 'budgeting', name: 'Rocket Money',
+    blurb: 'Free app that tracks spending and cancels unwanted subscriptions.',
+    highlights: ['Free plan available', 'Finds & cancels subscriptions', 'Bill negotiation service', 'Spending alerts'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/rocketmoney', payoutNote: 'varies',
+  },
+
+  // === Investing ===
+  {
+    id: 'investing-acorns', category: 'investing', name: 'Acorns',
+    blurb: 'Automatically invests your spare change into diversified ETFs.',
+    highlights: ['$3/mo starter plan', 'Round-up investing on autopilot', 'Hands-off ETF portfolios', 'Great for first-time investors'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/acorns', payoutNote: '~$5-10 funded',
+  },
+  {
+    id: 'investing-betterment', category: 'investing', name: 'Betterment',
+    blurb: 'Robo-advisor that builds and rebalances a portfolio for you.',
+    highlights: ['0.25% annual AUM fee', 'Automatic rebalancing', 'Tax-loss harvesting', 'Goal-based investing'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/betterment', payoutNote: 'varies',
+  },
+  {
+    id: 'investing-m1', category: 'investing', name: 'M1 Finance',
+    blurb: 'Build a custom "pie" of stocks and ETFs with automated investing.',
+    highlights: ['No management fee', 'Customizable portfolio pies', 'Automated deposits & rebalancing', 'Fractional shares'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/m1', payoutNote: '~$10-30 funded',
+  },
+
+  // === Insurance ===
+  {
+    id: 'insurance-lemonade', category: 'insurance', name: 'Lemonade Renters Insurance',
+    blurb: 'Renters coverage in minutes from an app, starting around $5/mo.',
+    highlights: ['From ~$5/mo', 'Sign up in under 2 minutes', 'Fast, app-based claims', 'Covers theft, damage & liability'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/lemonade', payoutNote: '~$8-15 per policy',
+  },
+  {
+    id: 'insurance-policygenius', category: 'insurance', name: 'Policygenius',
+    blurb: 'Compare quotes from top insurers for life, renters, and more.',
+    highlights: ['Free comparison marketplace', 'Multiple carriers in one place', 'Licensed agent support', 'No-pressure shopping'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/policygenius', payoutNote: 'varies by policy',
+  },
+  {
+    id: 'insurance-fabric', category: 'insurance', name: 'Fabric by Gerber Life',
+    blurb: 'Affordable term life insurance built for young adults and parents.',
+    highlights: ['Term life from a few dollars/mo', 'Apply online in minutes', 'No medical exam for many applicants', 'Free will & beneficiary tools'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/fabric', payoutNote: '~$10-20 per application',
+  },
 ]
 
 export function getProduct(id: string): Product | undefined {
