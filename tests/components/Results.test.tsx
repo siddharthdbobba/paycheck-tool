@@ -58,6 +58,17 @@ describe('Results', () => {
     expect(screen.getByText('$2,000')).toBeTruthy()
   })
 
+  it('highlights the employer match and places email capture under the budget', () => {
+    render(<Results result={sampleResult} products={sampleProducts} />)
+
+    const status = screen.getByRole('status')
+    expect(status.getAttribute('aria-live')).toBe('polite')
+    expect(screen.getByText(/free money/i)).toBeTruthy()
+    expect(screen.getByText('$2,800')).toBeTruthy()
+    expect(screen.getByText(/email me my plan/i)).toBeTruthy()
+    expect(screen.getByPlaceholderText('you@email.com')).toBeTruthy()
+  })
+
   it('renders the disclosure text', () => {
     render(<Results result={sampleResult} products={sampleProducts} />)
     expect(screen.getByText(COPY.disclosure)).toBeTruthy()

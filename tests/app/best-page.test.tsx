@@ -35,5 +35,7 @@ describe('/best/[slug]', () => {
     expect(screen.getAllByText(COPY.disclosure).length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText(categoryProducts[0].name).length).toBeTruthy()
     expect(screen.queryByText(excludedProduct.name)).toBeNull()
+    expect(screen.getByRole('link', { name: /run your numbers/i }).getAttribute('href')).toBe('/')
+    expect(screen.getByText(/email me my plan/i)).toBeTruthy()
   })
 })

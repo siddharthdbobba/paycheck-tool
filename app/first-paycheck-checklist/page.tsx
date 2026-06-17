@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Disclosure from '@/components/Disclosure'
+import EmailCapture from '@/components/EmailCapture'
 import { trackServer } from '@/lib/analytics-server'
 
 export const metadata: Metadata = {
@@ -11,9 +12,35 @@ export const metadata: Metadata = {
 
 export default async function FirstPaycheckGuidePage() {
   await trackServer('checklist_viewed')
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What should I do with my first paycheck?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Check your pay stub, enroll in your 401k up to the full match, build an emergency fund, open a Roth IRA, start credit history, and make a 50/30/20 budget.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How do I know my real take-home pay?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Use salary, state, pay frequency, and employer match details to estimate taxes, take-home pay, Roth IRA targets, and 50/30/20 budget amounts.',
+        },
+      },
+    ],
+  }
 
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans">
+    <div className="min-h-screen bg-zinc-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <main className="mx-auto max-w-2xl px-4 py-10">
         <article className="prose prose-zinc prose-sm max-w-none">
           <h1>Your First Paycheck: The Complete New Grad Checklist (2026)</h1>
@@ -172,10 +199,14 @@ export default async function FirstPaycheckGuidePage() {
             </p>
             <Link
               href="/"
-              className="mt-3 inline-block rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+              className="mt-3 inline-flex min-h-12 items-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
             >
-              Open the Paycheck Calculator →
+              Run your numbers
             </Link>
+          </div>
+
+          <div className="not-prose mt-6">
+            <EmailCapture />
           </div>
 
           <div className="mt-8 border-t border-zinc-100 pt-6">

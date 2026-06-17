@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Disclosure from '@/components/Disclosure'
+import EmailCapture from '@/components/EmailCapture'
 import ProductCard from '@/components/ProductCard'
 import { COMPARISONS, getComparison } from '@/lib/data/comparisons'
 import { productsForCategory } from '@/lib/data/products'
@@ -37,11 +39,37 @@ export default async function BestPage({ params }: BestPageProps) {
   }
 
   const products = productsForCategory(comparison.category)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `What is the best option for ${comparison.category} for new grads?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: comparison.intro,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Should I run my paycheck numbers first?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. Your take-home pay, 401k match, and monthly budget make it easier to choose accounts that fit your first job.',
+        },
+      },
+    ],
+  }
 
   await trackServer('best_page_viewed', { slug, category: comparison.category, product_count: products.length })
 
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans">
+    <div className="min-h-screen bg-zinc-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <main className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-8">
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
@@ -99,6 +127,23 @@ export default async function BestPage({ params }: BestPageProps) {
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+        </div>
+
+        <div className="mt-10 space-y-4 rounded-lg border border-indigo-200 bg-indigo-50 p-5">
+          <h2 className="text-lg font-semibold text-indigo-950">Run your numbers first</h2>
+          <p className="text-sm leading-6 text-indigo-900">
+            See your take-home pay, full employer match, and budget before picking accounts.
+          </p>
+          <Link
+            href="/"
+            className="inline-flex min-h-12 items-center rounded-md bg-indigo-600 px-5 text-sm font-semibold text-white hover:bg-indigo-700"
+          >
+            Run your numbers
+          </Link>
+        </div>
+
+        <div className="mt-6">
+          <EmailCapture />
         </div>
 
         {/* Footer Disclosure */}

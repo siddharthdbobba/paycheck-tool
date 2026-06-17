@@ -1,15 +1,58 @@
 import Calculator from '@/components/Calculator'
 
-export default function Home() {
+type HomeProps = {
+  searchParams: Promise<{ hook?: string | string[] }>
+}
+
+const HERO_HOOKS = {
+  match: {
+    headline: 'Stop missing free 401k money',
+    accent: 'Find the exact match dollars hiding in your first paycheck.',
+  },
+  paycheck: {
+    headline: 'See your real first paycheck',
+    accent: 'Turn your salary into take-home pay, free 401k match, and a simple 50/30/20 plan.',
+  },
+  budget: {
+    headline: 'Turn your first salary into a plan',
+    accent: 'Get your take-home pay, free match, and monthly budget from two required inputs.',
+  },
+} as const
+
+function pickHook(value: string | string[] | undefined) {
+  const key = Array.isArray(value) ? value[0] : value
+  return key && key in HERO_HOOKS ? HERO_HOOKS[key as keyof typeof HERO_HOOKS] : HERO_HOOKS.paycheck
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const hook = pickHook((await searchParams).hook)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'New Grad Paycheck Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    description: "See your real take-home pay, max your employer's 401k match, and build a 50/30/20 budget.",
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  }
+
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans">
-      <main className="mx-auto max-w-lg px-4 py-10">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
-            New Grad Paycheck Calculator
+    <div className="min-h-screen bg-zinc-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="mx-auto max-w-lg px-4 py-6">
+        <div className="mb-5 text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">
+            {hook.headline}
           </h1>
-          <p className="mt-2 text-sm text-zinc-600">
-            See your real take-home pay, max your employer match, and build a simple budget for your first job.
+          <p className="mt-2 text-sm leading-6 text-zinc-700">
+            {hook.accent}
           </p>
         </div>
         <Calculator />

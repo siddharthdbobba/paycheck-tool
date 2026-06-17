@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Link from 'next/link'
 import './globals.css'
 import { COPY } from '@/lib/copy'
 
@@ -27,6 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/95 px-4 backdrop-blur">
+          <div className="mx-auto flex h-14 max-w-5xl items-center justify-between">
+            <Link href="/" className="text-sm font-bold tracking-tight text-zinc-950">
+              Paycheck Tool
+            </Link>
+            <Link
+              href="/"
+              className="min-h-12 rounded-md px-3 py-3 text-sm font-semibold text-indigo-700 hover:text-indigo-900"
+            >
+              Run your numbers
+            </Link>
+          </div>
+        </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-zinc-200 px-4 py-6 text-center text-xs text-zinc-500">
           <p className="mb-2">{COPY.disclaimer}</p>
