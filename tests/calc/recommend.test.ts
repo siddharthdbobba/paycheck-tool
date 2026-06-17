@@ -18,4 +18,30 @@ describe('buildResult', () => {
     expect(r.rothMonthly).toBeGreaterThan(0)
     expect(r.budget.needs + r.budget.wants + r.budget.savings).toBeCloseTo(r.takeHomeAnnual / 12, 0)
   })
+
+  it('budget is a 50/30/20 split of MONTHLY (not annual) take-home', () => {
+    const r = buildResult(input)
+    const monthlyTakeHome = r.takeHomeAnnual / 12
+    expect(r.budget.needs).toBeCloseTo(monthlyTakeHome * 0.5, 2)
+    expect(r.budget.wants).toBeCloseTo(monthlyTakeHome * 0.3, 2)
+    expect(r.budget.savings).toBeCloseTo(monthlyTakeHome * 0.2, 2)
+  })
+
+  it('takeHomePerCheck uses correct per-frequency divisor', () => {
+    const biweekly = buildResult(input)
+    expect(biweekly.takeHomePerCheck).toBeCloseTo(biweekly.takeHomeAnnual / 26, 2)
+
+    const monthlyInput = { ...input, payFrequency: 'monthly' as const }
+    const monthly = buildResult(monthlyInput)
+    expect(monthly.takeHomePerCheck).toBeCloseTo(monthly.takeHomeAnnual / 12, 2)
+
+    expect(biweekly.takeHomePerCheck).not.toBeCloseTo(monthly.takeHomePerCheck, 0)
+  })
+
+  it('zero match yields employerMatchDollars === 0 and recommended401kPercent === 0', () => {
+    const zeroMatchInput = { ...input, matchPercent: 0, matchLimitPercent: 0 }
+    const r = buildResult(zeroMatchInput)
+    expect(r.employerMatchDollars).toBe(0)
+    expect(r.recommended401kPercent).toBe(0)
+  })
 })
