@@ -30,15 +30,20 @@ export default function EmailCapture() {
       const data = await res.json()
 
       if (!res.ok) {
-        setStatus({ type: 'error', message: data.error || 'Something went wrong' })
+        const errorMessage = data.error || 'Something went wrong'
+        track('email_capture_failed', { source: 'calculator', error: errorMessage })
+        setStatus({ type: 'error', message: errorMessage })
         return
       }
 
       posthog.identify(email, { email })
       track('email_submitted', { source: 'calculator' })
       setStatus({ type: 'success' })
-    } catch {
-      setStatus({ type: 'error', message: 'Network error. Please try again.' })
+    } catch (err) {
+      const errorMessage = 'Network error. Please try again.'
+      track('email_capture_failed', { source: 'calculator', error: errorMessage })
+      posthog.captureException(err)
+      setStatus({ type: 'error', message: errorMessage })
     }
   }
 
