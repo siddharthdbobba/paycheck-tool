@@ -11,6 +11,14 @@ describe('/', () => {
     ).toBeTruthy()
   })
 
+  it('adds dateModified and url to the home JSON-LD', async () => {
+    const { container } = render(await Home({ searchParams: Promise.resolve({}) }))
+    const script = container.querySelector('script[type="application/ld+json"]')
+
+    expect(script?.textContent).toContain('"dateModified"')
+    expect(script?.textContent).toContain('"url":"https://paycheck-tool-faceless1.vercel.app"')
+  })
+
   it('generates hook-specific title and OpenGraph description', async () => {
     await expect(
       generateMetadata({ searchParams: Promise.resolve({ hook: 'budget' }) }),

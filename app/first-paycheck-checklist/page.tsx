@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Disclosure from '@/components/Disclosure'
 import EmailCapture from '@/components/EmailCapture'
 import { trackServer } from '@/lib/analytics-server'
+import { BRAND, LAST_REVIEWED } from '@/lib/copy'
 
 export const metadata: Metadata = {
   title: 'Your First Paycheck: Complete Checklist for 2026 — What to Do Step by Step',
@@ -15,6 +16,8 @@ export default async function FirstPaycheckGuidePage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    url: `${BRAND.shareUrl}/first-paycheck-checklist`,
+    dateModified: LAST_REVIEWED.dateModified,
     mainEntity: [
       {
         '@type': 'Question',

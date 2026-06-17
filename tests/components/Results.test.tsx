@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import Results from '@/components/Results'
+import { StickyResultCta } from '@/components/Results'
 import type { PaycheckResult, Product } from '@/lib/calc/types'
 import { COPY } from '@/lib/copy'
 
@@ -107,5 +108,22 @@ describe('Results', () => {
     expect(screen.getByText(/2026 tax year/i)).toBeTruthy()
     expect(screen.getByText(/^IRS:/i)).toBeTruthy()
     expect(screen.getByText(/^SSA:/i)).toBeTruthy()
+  })
+
+  it('renders share and freshness controls near the result', () => {
+    render(<Results result={sampleResult} products={sampleProducts} />)
+
+    expect(screen.getByRole('button', { name: /share my result/i })).toBeTruthy()
+    expect(screen.getByText(/updated 2026/i)).toBeTruthy()
+  })
+
+  it('shows the sticky CTA only when a result is present', () => {
+    const { rerender } = render(<StickyResultCta hasResult={false} isHidden={false} targetId="email-capture" />)
+
+    expect(screen.queryByRole('button', { name: /get my full breakdown/i })).toBeNull()
+
+    rerender(<StickyResultCta hasResult isHidden={false} targetId="email-capture" />)
+
+    expect(screen.getByRole('button', { name: /get my full breakdown/i })).toBeTruthy()
   })
 })

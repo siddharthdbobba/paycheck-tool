@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Calculator from '@/components/Calculator'
+import { BRAND, LAST_REVIEWED } from '@/lib/copy'
 
 type HomeProps = {
   searchParams: Promise<{ hook?: string | string[] }>
@@ -52,6 +53,8 @@ export default async function Home({ searchParams }: HomeProps) {
     name: 'New Grad Paycheck Calculator',
     applicationCategory: 'FinanceApplication',
     operatingSystem: 'Web',
+    url: BRAND.shareUrl,
+    dateModified: LAST_REVIEWED.dateModified,
     description: "See your real take-home pay, max your employer's 401k match, and build a 50/30/20 budget.",
     offers: {
       '@type': 'Offer',

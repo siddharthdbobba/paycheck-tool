@@ -38,7 +38,17 @@ describe('/best/[slug]', () => {
     expect(screen.queryByText(categoryProducts[0].payoutNote)).toBeNull()
     expect(screen.getByText(/how we rank these picks/i)).toBeTruthy()
     expect(screen.getByText(/fees, eligibility, APY or rewards value/i)).toBeTruthy()
+    expect(screen.getByText(/updated 2026/i)).toBeTruthy()
     expect(screen.getByRole('link', { name: /run your numbers/i }).getAttribute('href')).toBe('/')
     expect(screen.getByText(/email me my plan/i)).toBeTruthy()
+  })
+
+  it('adds dateModified and url to the comparison JSON-LD', async () => {
+    const comparison = COMPARISONS[0]
+    const { container } = render(await BestPage({ params: Promise.resolve({ slug: comparison.slug }) }))
+    const script = container.querySelector('script[type="application/ld+json"]')
+
+    expect(script?.textContent).toContain('"dateModified"')
+    expect(script?.textContent).toContain(`"url":"https://paycheck-tool-faceless1.vercel.app/best/${comparison.slug}"`)
   })
 })

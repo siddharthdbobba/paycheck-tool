@@ -8,6 +8,7 @@ import RankingMethodology from '@/components/RankingMethodology'
 import { COMPARISONS, getComparison } from '@/lib/data/comparisons'
 import { productsForCategory } from '@/lib/data/products'
 import { trackServer } from '@/lib/analytics-server'
+import { BRAND, LAST_REVIEWED } from '@/lib/copy'
 
 type BestPageProps = {
   params: Promise<{ slug: string }>
@@ -57,6 +58,8 @@ export default async function BestPage({ params }: BestPageProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    url: `${BRAND.shareUrl}/best/${slug}`,
+    dateModified: LAST_REVIEWED.dateModified,
     mainEntity: [
       {
         '@type': 'Question',
@@ -88,6 +91,9 @@ export default async function BestPage({ params }: BestPageProps) {
       <main className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-8 space-y-4">
           <Disclosure />
+          <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+            {LAST_REVIEWED.label}
+          </p>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
             {comparison.title}
           </h1>
