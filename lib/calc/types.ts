@@ -30,4 +30,12 @@ export interface Product {
   highlights: string[]
   affiliateUrl: string
   payoutNote: string
+  rating: number
+  bestForTag: string
+  headlineStat: {
+    value: string
+    label: string
+  }
+  ctaLabel: string
+  reason?: string
 }

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import Link from 'next/link'
 import './globals.css'
 import { COPY } from '@/lib/copy'
+import HeaderCta from '@/components/HeaderCta'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,12 +34,7 @@ export default function RootLayout({
             <Link href="/" className="text-sm font-bold tracking-tight text-zinc-950">
               Paycheck Tool
             </Link>
-            <Link
-              href="/"
-              className="min-h-12 rounded-md px-3 py-3 text-sm font-semibold text-indigo-700 hover:text-indigo-900"
-            >
-              Run your numbers
-            </Link>
+            <HeaderCta />
           </div>
         </header>
         <main className="flex-1">{children}</main>

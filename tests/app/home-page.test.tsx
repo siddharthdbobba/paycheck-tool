@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import Home from '@/app/page'
+import Home, { generateMetadata } from '@/app/page'
 
 describe('/', () => {
   it('swaps the hero headline from the hook query param', async () => {
@@ -9,5 +9,16 @@ describe('/', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: /stop missing free 401k money/i }),
     ).toBeTruthy()
+  })
+
+  it('generates hook-specific title and OpenGraph description', async () => {
+    await expect(
+      generateMetadata({ searchParams: Promise.resolve({ hook: 'budget' }) }),
+    ).resolves.toMatchObject({
+      title: expect.stringContaining('first salary'),
+      openGraph: {
+        description: expect.stringContaining('monthly budget'),
+      },
+    })
   })
 })

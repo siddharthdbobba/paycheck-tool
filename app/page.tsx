@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Calculator from '@/components/Calculator'
 
 type HomeProps = {
@@ -8,20 +9,39 @@ const HERO_HOOKS = {
   match: {
     headline: 'Stop missing free 401k money',
     accent: 'Find the exact match dollars hiding in your first paycheck.',
+    title: 'Stop Missing Free 401k Money',
+    description: 'Find the exact employer match dollars hiding in your first paycheck.',
   },
   paycheck: {
     headline: 'See your real first paycheck',
     accent: 'Turn your salary into take-home pay, free 401k match, and a simple 50/30/20 plan.',
+    title: 'New Grad Paycheck Calculator',
+    description: 'Turn your salary into take-home pay, free 401k match, and a simple 50/30/20 plan.',
   },
   budget: {
     headline: 'Turn your first salary into a plan',
     accent: 'Get your take-home pay, free match, and monthly budget from two required inputs.',
+    title: 'Turn your first salary into a plan',
+    description: 'Get your take-home pay, free employer match, and monthly budget from two required inputs.',
   },
 } as const
 
 function pickHook(value: string | string[] | undefined) {
   const key = Array.isArray(value) ? value[0] : value
   return key && key in HERO_HOOKS ? HERO_HOOKS[key as keyof typeof HERO_HOOKS] : HERO_HOOKS.paycheck
+}
+
+export async function generateMetadata({ searchParams }: HomeProps): Promise<Metadata> {
+  const hook = pickHook((await searchParams).hook)
+
+  return {
+    title: hook.title,
+    description: hook.description,
+    openGraph: {
+      title: hook.title,
+      description: hook.description,
+    },
+  }
 }
 
 export default async function Home({ searchParams }: HomeProps) {

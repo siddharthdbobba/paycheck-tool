@@ -57,15 +57,26 @@ export default function Calculator() {
     }
   }, [grossAnnual, matchLimitPercent, matchPercent, matchPreset, payFrequency, state])
 
-  const result = useMemo(() => (input.grossAnnual > 0 ? buildResult(input) : null), [input])
-  const products = useMemo(() => (input.grossAnnual > 0 ? rankProducts(input) : []), [input])
+  const [debouncedInput, setDebouncedInput] = useState<PaycheckInput>(input)
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setDebouncedInput(input)
+    }, 250)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [input])
+
+  const calculationInput = input.grossAnnual > 0 ? debouncedInput : input
+  const result = useMemo(() => (calculationInput.grossAnnual > 0 ? buildResult(calculationInput) : null), [calculationInput])
+  const products = useMemo(() => (calculationInput.grossAnnual > 0 ? rankProducts(calculationInput) : []), [calculationInput])
 
   useEffect(() => {
     if (result && !hasTracked.current) {
       hasTracked.current = true
-      track('calc_completed', { salary: input.grossAnnual, state: input.state })
+      track('calc_completed', { salary: debouncedInput.grossAnnual, state: debouncedInput.state })
     }
-  }, [input.grossAnnual, input.state, result])
+  }, [debouncedInput.grossAnnual, debouncedInput.state, result])
 
   function markInteracted() {
     if (!hasInteracted) {
@@ -95,6 +106,9 @@ export default function Calculator() {
             placeholder="70000"
             required
           />
+          <p className="mt-1 text-xs leading-5 text-zinc-600">
+            Runs in your browser. We never see or store your salary.
+          </p>
         </div>
 
         {/* State */}
@@ -203,7 +217,9 @@ export default function Calculator() {
         {result ? (
           <Results result={result} products={products} shouldFocus={hasInteracted} />
         ) : (
-          <div role="status" aria-live="polite" aria-atomic="true" className="mt-6 min-h-[520px]" />
+          <div role="status" aria-live="polite" aria-atomic="true" className="mt-6 flex min-h-[520px] items-start justify-center rounded-lg border border-dashed border-zinc-300 bg-white px-4 py-12 text-center">
+            <p className="text-sm font-medium text-zinc-700">Enter your salary to see your numbers.</p>
+          </div>
         )}
       </div>
     </div>

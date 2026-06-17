@@ -9,5 +9,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ prod
   if (!product) return NextResponse.redirect(new URL('/', req.url))
   await prisma.clickEvent.create({ data: { productId: product.id, referer: req.headers.get('referer') } })
   await trackServer('affiliate_click', { productId: product.id, category: product.category })
+  if (product.affiliateUrl.includes('AFFILIATE_REPLACE')) {
+    return NextResponse.redirect(new URL('/?pending=1', req.url), 302)
+  }
   return NextResponse.redirect(product.affiliateUrl, 302)
 }

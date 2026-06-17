@@ -1,9 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import Calculator from '@/components/Calculator'
 
 describe('Calculator', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('calculates live from salary and state without a calculate button', () => {
+    vi.useFakeTimers()
     render(<Calculator />)
 
     const salary = screen.getByLabelText(/gross annual salary/i)
@@ -17,6 +22,7 @@ describe('Calculator', () => {
 
     fireEvent.change(salary, { target: { value: '90000' } })
     fireEvent.change(state, { target: { value: 'TX' } })
+    vi.advanceTimersByTime(250)
 
     expect(screen.getByRole('status').textContent).toContain('Take-home per paycheck')
   })
@@ -32,5 +38,18 @@ describe('Calculator', () => {
 
     expect(screen.getByLabelText(/employer match rate/i)).toBeTruthy()
     expect(screen.getByLabelText(/match limit/i)).toBeTruthy()
+  })
+
+  it('shows privacy copy near salary and an empty-state prompt when salary is cleared', () => {
+    vi.useFakeTimers()
+    render(<Calculator />)
+
+    expect(screen.getByText(/runs in your browser/i)).toBeTruthy()
+    expect(screen.getByText(/we never see or store your salary/i)).toBeTruthy()
+
+    fireEvent.change(screen.getByLabelText(/gross annual salary/i), { target: { value: '' } })
+    vi.advanceTimersByTime(250)
+
+    expect(screen.getByText(/enter your salary to see your numbers/i)).toBeTruthy()
   })
 })

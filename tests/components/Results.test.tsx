@@ -29,6 +29,11 @@ const sampleProducts: Product[] = [
     highlights: ['Competitive APY', 'No monthly fee'],
     affiliateUrl: 'https://example.com/sofi',
     payoutNote: '~$20-75 funded',
+    rating: 4.8,
+    bestForTag: 'starter emergency funds',
+    headlineStat: { value: '4.0% APY', label: 'high-yield savings' },
+    ctaLabel: 'Open my savings account',
+    reason: 'Because you net about $4,300/mo, this fits a starter emergency fund.',
   },
   {
     id: 'brokerage-fidelity',
@@ -38,6 +43,11 @@ const sampleProducts: Product[] = [
     highlights: ['No account fees', 'Great index funds'],
     affiliateUrl: 'https://example.com/fidelity',
     payoutNote: 'varies',
+    rating: 4.9,
+    bestForTag: 'first Roth IRA',
+    headlineStat: { value: '$0', label: 'account minimum' },
+    ctaLabel: 'Start my Roth IRA',
+    reason: 'Your employer matches, so this is a strong next retirement step.',
   },
 ]
 
@@ -72,5 +82,30 @@ describe('Results', () => {
   it('renders the disclosure text', () => {
     render(<Results result={sampleResult} products={sampleProducts} />)
     expect(screen.getByText(COPY.disclosure)).toBeTruthy()
+  })
+
+  it('renders disclosure above recommendations and never shows internal payout notes', () => {
+    render(<Results result={sampleResult} products={sampleProducts} />)
+    const disclosure = screen.getByText(COPY.disclosure)
+    const recommendations = screen.getByText(/recommended accounts/i)
+
+    expect(disclosure.compareDocumentPosition(recommendations) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(screen.queryByText('~$20-75 funded')).toBeNull()
+    expect(screen.queryByText('varies')).toBeNull()
+  })
+
+  it('renders conversion and trust details for recommended products', () => {
+    render(<Results result={sampleResult} products={sampleProducts} />)
+
+    expect(screen.getByText('4.0% APY')).toBeTruthy()
+    expect(screen.getByText(/4\.8/)).toBeTruthy()
+    expect(screen.getByText(/best for starter emergency funds/i)).toBeTruthy()
+    expect(screen.getByText(/#1 pick/i)).toBeTruthy()
+    expect(screen.getByRole('link', { name: /open my savings account/i }).getAttribute('href')).toBe('/go/savings-sofi')
+    expect(screen.getByText(sampleProducts[0].reason ?? '')).toBeTruthy()
+    expect(screen.getByText(/how we calculate/i)).toBeTruthy()
+    expect(screen.getByText(/2026 tax year/i)).toBeTruthy()
+    expect(screen.getByText(/^IRS:/i)).toBeTruthy()
+    expect(screen.getByText(/^SSA:/i)).toBeTruthy()
   })
 })

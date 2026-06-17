@@ -6,6 +6,7 @@ import Disclaimer from './Disclaimer'
 import Disclosure from './Disclosure'
 import ProductCard from './ProductCard'
 import EmailCapture from './EmailCapture'
+import HowWeCalculate from './HowWeCalculate'
 
 interface ResultsProps {
   result: PaycheckResult
@@ -168,15 +169,18 @@ export default function Results({ result, products, shouldFocus = false }: Resul
         </div>
       </div>
 
+      <HowWeCalculate />
+
       {/* Email Capture */}
       <EmailCapture />
 
       {/* Product Cards */}
       {products.length > 0 && (
         <div className="space-y-4">
+          <Disclosure />
           <p className="text-sm font-semibold uppercase tracking-wide text-zinc-700">Recommended Accounts</p>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ProductCard key={product.id} product={product} isTopPick={index === 0} />
           ))}
         </div>
       )}
@@ -184,7 +188,6 @@ export default function Results({ result, products, shouldFocus = false }: Resul
       {/* Disclosures */}
       <div className="border-t border-zinc-100 pt-4">
         <Disclaimer />
-        <Disclosure />
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Disclosure from '@/components/Disclosure'
 import EmailCapture from '@/components/EmailCapture'
 import ProductCard from '@/components/ProductCard'
+import RankingMethodology from '@/components/RankingMethodology'
 import { COMPARISONS, getComparison } from '@/lib/data/comparisons'
 import { productsForCategory } from '@/lib/data/products'
 import { trackServer } from '@/lib/analytics-server'
@@ -39,6 +40,20 @@ export default async function BestPage({ params }: BestPageProps) {
   }
 
   const products = productsForCategory(comparison.category)
+  const comparisonRows = [
+    {
+      label: 'Best For',
+      values: products.map((product) => product.bestForTag),
+    },
+    {
+      label: 'Rating',
+      values: products.map((product) => `${product.rating.toFixed(1)} out of 5`),
+    },
+    {
+      label: 'Key Perks',
+      values: products.map((product) => product.highlights.slice(0, 3).join(', ')),
+    },
+  ]
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -71,17 +86,33 @@ export default async function BestPage({ params }: BestPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="mx-auto max-w-3xl px-4 py-10">
-        <div className="mb-8">
+        <div className="mb-8 space-y-4">
+          <Disclosure />
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
             {comparison.title}
           </h1>
           <p className="mt-2 text-sm leading-6 text-zinc-600">{comparison.intro}</p>
-          <Disclosure />
+          <RankingMethodology />
         </div>
 
         {/* Comparison Table */}
-        <div className="mb-10 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
-          <table className="w-full text-sm">
+        <div className="mb-10">
+          <div className="space-y-4 md:hidden">
+            {products.map((product) => (
+              <div key={product.id} className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+                <h2 className="text-base font-semibold text-zinc-950">{product.name}</h2>
+                <dl className="mt-3 space-y-3 text-sm">
+                  {comparisonRows.map((row) => (
+                    <div key={row.label} className="border-t border-zinc-100 pt-3 first:border-t-0 first:pt-0">
+                      <dt className="font-medium text-zinc-600">{row.label}</dt>
+                      <dd className="mt-1 text-zinc-900">{row.values[products.indexOf(product)]}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
+          </div>
+          <table className="hidden w-full overflow-hidden rounded-lg border border-zinc-200 bg-white text-sm shadow-sm md:table">
             <thead>
               <tr className="border-b border-zinc-200 bg-zinc-50">
                 <th className="px-4 py-3 text-left font-semibold text-zinc-700">Feature</th>
@@ -93,30 +124,14 @@ export default async function BestPage({ params }: BestPageProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
-              <tr>
-                <td className="px-4 py-3 font-medium text-zinc-600">Best For</td>
-                {products.map((product) => (
-                  <td key={product.id} className="px-4 py-3 text-zinc-800">{product.blurb}</td>
-                ))}
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-medium text-zinc-600">Key Perks</td>
-                {products.map((product) => (
-                  <td key={product.id} className="px-4 py-3">
-                    <ul className="list-inside list-disc text-xs text-zinc-700">
-                      {product.highlights.slice(0, 3).map((h, i) => (
-                        <li key={i}>{h}</li>
-                      ))}
-                    </ul>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-medium text-zinc-600">Payout</td>
-                {products.map((product) => (
-                  <td key={product.id} className="px-4 py-3 text-xs text-zinc-500">{product.payoutNote}</td>
-                ))}
-              </tr>
+              {comparisonRows.map((row) => (
+                <tr key={row.label}>
+                  <td className="px-4 py-3 font-medium text-zinc-600">{row.label}</td>
+                  {row.values.map((value, index) => (
+                    <td key={products[index].id} className="px-4 py-3 text-zinc-800">{value}</td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -124,8 +139,8 @@ export default async function BestPage({ params }: BestPageProps) {
         {/* Product Cards (detailed) */}
         <div className="space-y-6">
           <h2 className="text-lg font-semibold text-zinc-900">Detailed Breakdown</h2>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ProductCard key={product.id} product={product} isTopPick={index === 0} />
           ))}
         </div>
 
@@ -144,11 +159,6 @@ export default async function BestPage({ params }: BestPageProps) {
 
         <div className="mt-6">
           <EmailCapture />
-        </div>
-
-        {/* Footer Disclosure */}
-        <div className="mt-10 border-t border-zinc-100 pt-4">
-          <Disclosure />
         </div>
       </main>
     </div>
