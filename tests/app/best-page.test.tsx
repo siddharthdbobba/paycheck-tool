@@ -51,4 +51,23 @@ describe('/best/[slug]', () => {
     expect(script?.textContent).toContain('"dateModified"')
     expect(script?.textContent).toContain(`"url":"https://paycheck-tool-faceless1.vercel.app/best/${comparison.slug}"`)
   })
+
+  it('renders accessible desktop comparison headers, sticky table chrome, zebra rows, and best-for chips', async () => {
+    const comparison = COMPARISONS[0]
+    const categoryProducts = productsForCategory(comparison.category)
+    const { container } = render(await BestPage({ params: Promise.resolve({ slug: comparison.slug }) }))
+
+    expect(container.querySelector('thead')?.className).toContain('sticky')
+    expect(container.querySelector('thead')?.className).toContain('top-16')
+    expect(container.querySelector('tbody tr')?.className).toContain('even:bg-zinc-50')
+
+    const headers = Array.from(container.querySelectorAll('table th'))
+    expect(headers.every((header) => header.getAttribute('scope'))).toBe(true)
+
+    const table = container.querySelector('table')
+
+    for (const product of categoryProducts) {
+      expect(table?.textContent).toContain(`Best for ${product.bestForTag}`)
+    }
+  })
 })

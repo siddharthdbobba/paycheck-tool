@@ -1,12 +1,15 @@
 import type { MetadataRoute } from 'next'
+import { BRAND } from '@/lib/copy'
 import { COMPARISONS } from '@/lib/data/comparisons'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://paychecktool.app'
+  const baseUrl = BRAND.shareUrl
 
   const staticPages = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1.0 },
     { url: `${baseUrl}/privacy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
+    { url: `${baseUrl}/methodology`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/editorial-standards`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
     { url: `${baseUrl}/first-paycheck-checklist`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
   ]
 

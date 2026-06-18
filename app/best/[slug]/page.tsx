@@ -55,6 +55,7 @@ export default async function BestPage({ params }: BestPageProps) {
       values: products.map((product) => product.highlights.slice(0, 3).join(', ')),
     },
   ]
+  const bestRating = Math.max(...products.map((product) => product.rating))
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -119,22 +120,34 @@ export default async function BestPage({ params }: BestPageProps) {
             ))}
           </div>
           <table className="hidden w-full overflow-hidden rounded-lg border border-zinc-200 bg-white text-sm shadow-sm md:table">
-            <thead>
+            <thead className="sticky top-16 z-10">
               <tr className="border-b border-zinc-200 bg-zinc-50">
-                <th className="px-4 py-3 text-left font-semibold text-zinc-700">Feature</th>
+                <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-700">Feature</th>
                 {products.map((product) => (
-                  <th key={product.id} className="px-4 py-3 text-left font-semibold text-zinc-700">
-                    {product.name}
+                  <th key={product.id} scope="col" className="px-4 py-3 text-left font-semibold text-zinc-700">
+                    <span className="block text-zinc-900">{product.name}</span>
+                    <span className="mt-2 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-800">
+                      Best for {product.bestForTag}
+                    </span>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
               {comparisonRows.map((row) => (
-                <tr key={row.label}>
-                  <td className="px-4 py-3 font-medium text-zinc-600">{row.label}</td>
+                <tr key={row.label} className="even:bg-zinc-50">
+                  <th scope="row" className="px-4 py-3 text-left font-medium text-zinc-600">{row.label}</th>
                   {row.values.map((value, index) => (
-                    <td key={products[index].id} className="px-4 py-3 text-zinc-800">{value}</td>
+                    <td
+                      key={products[index].id}
+                      className={
+                        row.label === 'Rating' && products[index].rating === bestRating
+                          ? 'px-4 py-3 font-semibold text-zinc-950'
+                          : 'px-4 py-3 text-zinc-800'
+                      }
+                    >
+                      {value}
+                    </td>
                   ))}
                 </tr>
               ))}
