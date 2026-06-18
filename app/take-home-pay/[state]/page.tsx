@@ -7,6 +7,7 @@ import { DEFAULT_STATE_RATE, STATE_EFFECTIVE_RATES, TAX_YEAR } from '@/lib/calc/
 import { takeHome } from '@/lib/calc/tax'
 import type { PaycheckInput } from '@/lib/calc/types'
 import { BRAND, COPY } from '@/lib/copy'
+import { SALARY_PAGE_STATE_CODES, salaryPageHref } from '@/lib/data/salary-pages'
 import { allStatePages, getStatePageBySlug } from '@/lib/data/state-pages'
 
 type StateTakeHomePageProps = {
@@ -23,6 +24,7 @@ type SalaryExample = {
 }
 
 const REPRESENTATIVE_SALARIES = [50_000, 65_000, 80_000] as const
+const RELATED_SALARY_PAGES = [55_000, 65_000, 85_000] as const
 
 export function generateStaticParams() {
   return allStatePages().map((state) => ({ state: state.slug }))
@@ -56,6 +58,7 @@ export default async function StateTakeHomePage({ params }: StateTakeHomePagePro
   }
 
   const examples = REPRESENTATIVE_SALARIES.map((salary) => buildSalaryExample(salary, state.code))
+  const hasSalaryPages = SALARY_PAGE_STATE_CODES.some((code) => code === state.code)
   const stateRate = STATE_EFFECTIVE_RATES[state.code] ?? DEFAULT_STATE_RATE
   const taxNote = stateRate === 0
     ? `${state.name} has no state income tax in this estimate, so the state income tax line is $0.`
@@ -125,6 +128,23 @@ export default async function StateTakeHomePage({ params }: StateTakeHomePagePro
               <h2 className="text-lg font-semibold text-indigo-950">State tax note</h2>
               <p className="mt-2 text-sm leading-6 text-indigo-900">{taxNote}</p>
             </section>
+
+            {hasSalaryPages && (
+              <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+                <h2 className="text-lg font-semibold text-zinc-950">Popular {state.name} salary estimates</h2>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {RELATED_SALARY_PAGES.map((salary) => (
+                    <Link
+                      key={salary}
+                      href={salaryPageHref(salary, state.code)}
+                      className="rounded-md border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-800 hover:border-indigo-300 hover:text-indigo-700"
+                    >
+                      {formatMoney(salary)} in {state.name}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <section className="space-y-3 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
               <h2 className="text-lg font-semibold text-zinc-950">Before you use the estimate</h2>

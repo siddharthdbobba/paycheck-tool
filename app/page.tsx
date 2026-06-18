@@ -72,7 +72,7 @@ export default async function Home({ searchParams }: HomeProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="mx-auto max-w-lg px-4 py-6">
+      <div id="calculator" className="mx-auto max-w-lg px-4 py-6">
         <div className="mb-5 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">
             {hook.headline}

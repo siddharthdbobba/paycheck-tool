@@ -11,6 +11,7 @@ type MatchPreset = 'typical-100-4' | 'half-50-6' | 'none' | 'custom'
 
 type CalculatorProps = {
   defaultState?: string
+  defaultSalary?: number
 }
 
 const MATCH_PRESETS: Record<Exclude<MatchPreset, 'custom'>, { matchPercent: number; matchLimitPercent: number }> = {
@@ -24,8 +25,8 @@ function parseMoney(value: string): number {
   return Number.parseFloat(normalized) || 0
 }
 
-export default function Calculator({ defaultState = 'IN' }: CalculatorProps) {
-  const [grossAnnual, setGrossAnnual] = useState<string>('70000')
+export default function Calculator({ defaultState = 'IN', defaultSalary }: CalculatorProps) {
+  const [grossAnnual, setGrossAnnual] = useState<string>(() => String(defaultSalary ?? 70_000))
   const [state, setState] = useState<string>(defaultState)
   const [payFrequency, setPayFrequency] = useState<PaycheckInput['payFrequency']>('biweekly')
   const [matchPreset, setMatchPreset] = useState<MatchPreset>('typical-100-4')
