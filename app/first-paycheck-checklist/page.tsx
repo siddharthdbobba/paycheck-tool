@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 import Disclosure from '@/components/Disclosure'
 import EmailCapture from '@/components/EmailCapture'
 import { trackServer } from '@/lib/analytics-server'
@@ -43,6 +44,12 @@ export default async function FirstPaycheckGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: BRAND.shareUrl },
+          { name: 'First paycheck checklist', item: `${BRAND.shareUrl}/first-paycheck-checklist` },
+        ]}
       />
       <main className="mx-auto max-w-2xl px-4 py-10">
         <article className="max-w-none text-sm leading-7 text-zinc-700 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:leading-tight [&_h1]:tracking-tight [&_h1]:text-zinc-950 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-zinc-950 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5 [&_p]:mt-4 [&_strong]:font-semibold [&_strong]:text-zinc-950 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">

@@ -43,6 +43,12 @@ describe('Calculator', () => {
     expect(screen.getByLabelText(/match limit/i)).toBeTruthy()
   })
 
+  it('accepts an optional default state for embedded calculators', () => {
+    render(<Calculator defaultState="TX" />)
+
+    expect((screen.getByLabelText(/^state$/i) as HTMLSelectElement).value).toBe('TX')
+  })
+
   it('shows privacy copy near salary and an empty-state prompt when salary is cleared', () => {
     vi.useFakeTimers()
     render(<Calculator />)

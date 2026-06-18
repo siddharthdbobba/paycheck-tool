@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
 import type { PaycheckResult, Product } from '@/lib/calc/types'
 import { LAST_REVIEWED } from '@/lib/copy'
+import { getStatePageByCode } from '@/lib/data/state-pages'
 import { buildShareCardCopy, buildShareUrl, createShareCardFile } from '@/lib/share-card'
 import Disclaimer from './Disclaimer'
 import Disclosure from './Disclosure'
@@ -16,6 +18,7 @@ interface ResultsProps {
   result: PaycheckResult
   products: Product[]
   shouldFocus?: boolean
+  stateCode?: string
 }
 
 function usd(amount: number): string {
@@ -135,7 +138,7 @@ export function StickyResultCta({ hasResult, isHidden, targetId }: StickyResultC
   )
 }
 
-export default function Results({ result, products, shouldFocus = false }: ResultsProps) {
+export default function Results({ result, products, shouldFocus = false, stateCode }: ResultsProps) {
   const {
     takeHomePerCheck,
     recommended401kPercent,
@@ -150,6 +153,7 @@ export default function Results({ result, products, shouldFocus = false }: Resul
   const [liveSummary, setLiveSummary] = useState(() => buildLiveSummary(result))
   const shareCopy = buildShareCardCopy(result)
   const shareUrl = buildShareUrl()
+  const statePage = stateCode ? getStatePageByCode(stateCode) : undefined
 
   useEffect(() => {
     if (!shouldFocus || hasFocused.current) {
@@ -249,6 +253,14 @@ export default function Results({ result, products, shouldFocus = false }: Resul
         <p className="mt-1 text-3xl font-bold text-zinc-950">
           <AnimatedMoney amount={takeHomePerCheck} />
         </p>
+        {statePage && (
+          <Link
+            href={statePage.href}
+            className="mt-3 inline-flex text-sm font-semibold text-indigo-700 underline underline-offset-2 hover:text-indigo-900"
+          >
+            See {statePage.name} take-home pay details
+          </Link>
+        )}
       </div>
 
       {/* 401k match */}

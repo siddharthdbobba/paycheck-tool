@@ -24,7 +24,7 @@ export interface PaycheckResult {
 
 export interface Product {
   id: string
-  category: 'savings' | 'brokerage' | 'card' | 'budgeting' | 'investing' | 'insurance'
+  category: 'savings' | 'brokerage' | 'card' | 'budgeting' | 'investing' | 'insurance' | 'checking' | 'robo'
   name: string
   blurb: string
   highlights: string[]

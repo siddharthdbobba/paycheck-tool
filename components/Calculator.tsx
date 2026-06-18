@@ -9,6 +9,10 @@ import { US_STATES } from '@/lib/data/states'
 
 type MatchPreset = 'typical-100-4' | 'half-50-6' | 'none' | 'custom'
 
+type CalculatorProps = {
+  defaultState?: string
+}
+
 const MATCH_PRESETS: Record<Exclude<MatchPreset, 'custom'>, { matchPercent: number; matchLimitPercent: number }> = {
   'typical-100-4': { matchPercent: 100, matchLimitPercent: 4 },
   'half-50-6': { matchPercent: 50, matchLimitPercent: 6 },
@@ -20,9 +24,9 @@ function parseMoney(value: string): number {
   return Number.parseFloat(normalized) || 0
 }
 
-export default function Calculator() {
+export default function Calculator({ defaultState = 'IN' }: CalculatorProps) {
   const [grossAnnual, setGrossAnnual] = useState<string>('70000')
-  const [state, setState] = useState<string>('IN')
+  const [state, setState] = useState<string>(defaultState)
   const [payFrequency, setPayFrequency] = useState<PaycheckInput['payFrequency']>('biweekly')
   const [matchPreset, setMatchPreset] = useState<MatchPreset>('typical-100-4')
   const [matchPercent, setMatchPercent] = useState<string>('100')
@@ -200,7 +204,7 @@ export default function Calculator() {
 
       <div className="min-h-[720px] pb-28">
         {result ? (
-          <Results result={result} products={products} shouldFocus={hasInteracted} />
+          <Results result={result} products={products} shouldFocus={hasInteracted} stateCode={calculationInput.state} />
         ) : (
           <div role="status" aria-live="polite" aria-atomic="true" className="mt-6 flex min-h-[720px] items-start justify-center rounded-lg border border-dashed border-zinc-300 bg-white px-4 py-12 text-center">
             <p className="text-sm font-medium text-zinc-700">Enter your salary to see your numbers.</p>

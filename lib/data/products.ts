@@ -136,6 +136,27 @@ export const PRODUCTS: Product[] = [
     affiliateUrl: 'https://AFFILIATE_REPLACE/m1',
     rating: 4.6, bestForTag: 'custom ETF pies', headlineStat: { value: '$0', label: 'management fee' }, ctaLabel: 'Build my portfolio',
   },
+  {
+    id: 'robo-betterment', category: 'robo', name: 'Betterment',
+    blurb: 'Robo-advisor that builds and rebalances a portfolio for you.',
+    highlights: ['0.25% annual AUM fee', 'Automatic rebalancing', 'Tax-loss harvesting', 'Goal-based investing'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/betterment-robo',
+    rating: 4.8, bestForTag: 'hands-off portfolios', headlineStat: { value: '0.25%', label: 'annual advisory fee' }, ctaLabel: 'Automate my investing',
+  },
+  {
+    id: 'robo-wealthfront', category: 'robo', name: 'Wealthfront Automated Investing',
+    blurb: 'A hands-off robo-advisor with diversified portfolios and tax-aware features.',
+    highlights: ['0.25% annual advisory fee', '$500 minimum', 'Automatic rebalancing', 'Tax-loss harvesting'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/wealthfront-investing',
+    rating: 4.8, bestForTag: 'tax-aware automation', headlineStat: { value: '0.25%', label: 'annual advisory fee' }, ctaLabel: 'Start automated investing',
+  },
+  {
+    id: 'robo-schwab-intelligent', category: 'robo', name: 'Schwab Intelligent Portfolios',
+    blurb: 'Automated ETF portfolios from a major brokerage with no advisory fee.',
+    highlights: ['$5,000 minimum', '$0 advisory fee', 'Automatic rebalancing', 'Broad ETF portfolios'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/schwab-intelligent-portfolios',
+    rating: 4.6, bestForTag: 'established brokerage users', headlineStat: { value: '$0', label: 'advisory fee' }, ctaLabel: 'Compare automated portfolios',
+  },
 
   // === Insurance ===
   {
@@ -158,6 +179,29 @@ export const PRODUCTS: Product[] = [
     highlights: ['Term life from a few dollars/mo', 'Apply online in minutes', 'No medical exam for many applicants', 'Free will & beneficiary tools'],
     affiliateUrl: 'https://AFFILIATE_REPLACE/fabric',
     rating: 4.6, bestForTag: 'young families', headlineStat: { value: 'Minutes', label: 'online application' }, ctaLabel: 'Check my coverage',
+  },
+
+  // === Checking ===
+  {
+    id: 'checking-capitalone-money', category: 'checking', name: 'Capital One MONEY Teen Checking',
+    blurb: 'A no-fee student-friendly checking account with a strong mobile app.',
+    highlights: ['$0 monthly fee', 'No minimum balance', 'Debit card included', '70,000+ fee-free ATMs'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/capitalone-money',
+    rating: 4.7, bestForTag: 'fee-free student banking', headlineStat: { value: '$0', label: 'monthly fee' }, ctaLabel: 'Open student checking',
+  },
+  {
+    id: 'checking-chase-college', category: 'checking', name: 'Chase College Checking',
+    blurb: 'A student checking account with broad branch access and easy direct deposit.',
+    highlights: ['$0 monthly service fee while eligible', 'Large branch network', 'Zelle access', 'Strong mobile app'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/chase-college-checking',
+    rating: 4.6, bestForTag: 'branch access', headlineStat: { value: '$0', label: 'eligible student fee' }, ctaLabel: 'Check eligibility',
+  },
+  {
+    id: 'checking-discover-cashback', category: 'checking', name: 'Discover Cashback Debit',
+    blurb: 'A no-fee checking account that earns cash back on debit card purchases.',
+    highlights: ['1% cash back on eligible debit purchases', '$0 monthly fee', 'No minimum deposit', '60,000+ no-fee ATMs'],
+    affiliateUrl: 'https://AFFILIATE_REPLACE/discover-cashback-debit',
+    rating: 4.8, bestForTag: 'debit rewards', headlineStat: { value: '1%', label: 'eligible debit cash back' }, ctaLabel: 'Earn debit rewards',
   },
 ]
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 import Disclosure from '@/components/Disclosure'
 import EmailCapture from '@/components/EmailCapture'
 import ProductCard from '@/components/ProductCard'
@@ -88,6 +89,12 @@ export default async function BestPage({ params }: BestPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: BRAND.shareUrl },
+          { name: comparison.title, item: `${BRAND.shareUrl}/best/${slug}` },
+        ]}
       />
       <main className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-8 space-y-4">

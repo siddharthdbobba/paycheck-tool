@@ -115,6 +115,14 @@ describe('Results', () => {
     expect(screen.getByText(/updated 2026/i)).toBeTruthy()
   })
 
+  it('links calculator results to the matching state details page', () => {
+    render(<Results result={sampleResult} products={sampleProducts} stateCode="TX" />)
+
+    expect(
+      screen.getByRole('link', { name: /see texas take-home pay details/i }).getAttribute('href'),
+    ).toBe('/take-home-pay/tx')
+  })
+
   it('shows the sticky CTA only when a result is present', () => {
     const { rerender } = render(<StickyResultCta hasResult={false} isHidden={false} targetId="email-capture" />)
 
