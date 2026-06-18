@@ -272,6 +272,12 @@ export default function Results({ result, products, shouldFocus = false, stateCo
         <p className="mt-2 text-sm font-medium text-emerald-900">
           Contribute {recommended401kPercent}% so you do not leave your employer match on the table.
         </p>
+        <Link
+          href="/guides/401k-match-vs-student-loans"
+          className="mt-3 inline-flex text-sm font-semibold text-emerald-950 underline underline-offset-2 hover:text-emerald-800"
+        >
+          New to 401k match? Read the student-loan tradeoff guide
+        </Link>
       </div>
 
       {/* Roth IRA */}
@@ -304,6 +310,12 @@ export default function Results({ result, products, shouldFocus = false, stateCo
             <span className="font-semibold text-zinc-950"><AnimatedMoney amount={budget.savings} /></span>
           </div>
         </div>
+        <Link
+          href="/guides/how-much-of-my-paycheck-to-save"
+          className="mt-4 inline-flex text-sm font-semibold text-indigo-700 underline underline-offset-2 hover:text-indigo-900"
+        >
+          Learn how much of each paycheck to save
+        </Link>
       </div>
 
       <HowWeCalculate />

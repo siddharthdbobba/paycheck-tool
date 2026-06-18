@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { BRAND } from '@/lib/copy'
 import { COMPARISONS } from '@/lib/data/comparisons'
+import { allGuides } from '@/lib/data/guides'
 import { allStatePages } from '@/lib/data/state-pages'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -12,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/methodology`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${baseUrl}/editorial-standards`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
     { url: `${baseUrl}/first-paycheck-checklist`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${baseUrl}/guides`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: `${baseUrl}/take-home-pay`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
   ]
 
@@ -29,5 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...comparisonPages, ...statePages]
+  const guidePages = allGuides().map((guide) => ({
+    url: `${baseUrl}/guides/${guide.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...comparisonPages, ...guidePages, ...statePages]
 }

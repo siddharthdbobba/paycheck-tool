@@ -215,6 +215,18 @@ export default async function FirstPaycheckGuidePage() {
             </Link>
           </div>
 
+          <div className="mt-4 rounded-lg border border-zinc-200 bg-white p-5">
+            <h3 className="text-base font-semibold text-zinc-950">Go deeper on the first decisions</h3>
+            <p className="mt-1 text-sm leading-6 text-zinc-700">
+              Read the{' '}
+              <Link href="/guides" className="font-semibold text-indigo-700 underline underline-offset-2">
+                new grad money guides
+              </Link>{' '}
+              for Roth vs traditional 401k, savings-rate, student-loan, and first-paycheck withholding
+              decisions.
+            </p>
+          </div>
+
           <div className="mt-6">
             <EmailCapture />
           </div>

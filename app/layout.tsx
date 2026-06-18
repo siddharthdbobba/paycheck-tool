@@ -42,6 +42,9 @@ export default function RootLayout({
         <footer className="border-t border-zinc-200 px-4 py-6 text-xs text-zinc-500">
           <div className="mx-auto flex max-w-5xl flex-col items-center gap-3 text-center">
             <nav aria-label="Trust and policy links" className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+              <Link href="/guides" className="underline underline-offset-2 hover:text-zinc-700">
+                Guides
+              </Link>
               <Link href="/methodology" className="underline underline-offset-2 hover:text-zinc-700">
                 Methodology
               </Link>
