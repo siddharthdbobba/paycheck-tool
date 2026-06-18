@@ -4,16 +4,13 @@ import { notFound } from 'next/navigation'
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 import { BRAND, COPY, LAST_REVIEWED } from '@/lib/copy'
 import { allGuides, getGuide } from '@/lib/data/guides'
+import { jsonLdScript } from '@/lib/json-ld'
 
 type GuidePageProps = {
   params: Promise<{ slug: string }>
 }
 
 export const dynamicParams = false
-
-function jsonLdScript(data: object) {
-  return JSON.stringify(data).replace(/</g, '\\u003c')
-}
 
 export function generateStaticParams() {
   return allGuides().map((guide) => ({ slug: guide.slug }))

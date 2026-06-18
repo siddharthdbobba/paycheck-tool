@@ -40,8 +40,8 @@ export async function generateMetadata({ params }: SalaryStatePageProps): Promis
     notFound()
   }
 
-  const title = `${page.salary} Salary After Taxes in ${page.stateName} ${TAX_YEAR}`
   const formattedSalary = formatMoney(page.salary)
+  const title = `${formattedSalary} Salary After Taxes in ${page.stateName} ${TAX_YEAR}`
 
   return {
     title,
@@ -71,7 +71,7 @@ export default async function SalaryStatePage({ params }: SalaryStatePageProps) 
           { name: 'Home', item: BRAND.shareUrl },
           { name: 'Salary', item: `${BRAND.shareUrl}/salary` },
           { name: page.stateName, item: `${BRAND.shareUrl}${stateHref}` },
-          { name: String(page.salary), item: page.url },
+          { name: formattedSalary, item: page.url },
         ]}
       />
       <main className="mx-auto max-w-5xl px-4 py-10">
@@ -82,7 +82,7 @@ export default async function SalaryStatePage({ params }: SalaryStatePageProps) 
                 Updated {TAX_YEAR}
               </p>
               <h1 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">
-                {page.salary} salary after taxes in {page.stateName}
+                {formattedSalary} salary after taxes in {page.stateName}
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-zinc-700">
                 A {formattedSalary} salary in {page.stateName} is estimated with the same take-home pay calculator used

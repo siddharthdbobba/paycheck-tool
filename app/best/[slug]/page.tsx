@@ -10,6 +10,7 @@ import { COMPARISONS, getComparison } from '@/lib/data/comparisons'
 import { productsForCategory } from '@/lib/data/products'
 import { trackServer } from '@/lib/analytics-server'
 import { BRAND, LAST_REVIEWED } from '@/lib/copy'
+import { jsonLdScript } from '@/lib/json-ld'
 
 type BestPageProps = {
   params: Promise<{ slug: string }>
@@ -88,7 +89,7 @@ export default async function BestPage({ params }: BestPageProps) {
     <div className="min-h-screen bg-zinc-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       <BreadcrumbJsonLd
         items={[

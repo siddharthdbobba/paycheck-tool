@@ -92,7 +92,7 @@ function AnimatedMoney({ amount, suffix = '' }: { amount: number; suffix?: strin
 }
 
 function buildLiveSummary(result: PaycheckResult): string {
-  return `Take-home ${usd(result.takeHomePerCheck)} per check; ${usd(result.employerMatchDollars)} free 401k match.`
+  return `Take-home ${usd(result.takeHomePerCheck)} per check; ${usd(result.employerMatchDollars)} free 401k match; Roth target ${usd(result.rothMonthly)} per month; 50/30/20 budget ${usd(result.budget.needs)} needs, ${usd(result.budget.wants)} wants, ${usd(result.budget.savings)} savings.`
 }
 
 type StickyResultCtaProps = {

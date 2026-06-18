@@ -29,7 +29,7 @@ describe('/salary/[amount]/[state]', () => {
 
     render(await SalaryStatePage({ params: Promise.resolve({ amount: '65000', state: 'ca' }) }))
 
-    expect(screen.getByRole('heading', { level: 1, name: /65000 salary after taxes in california/i })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: /\$65,000 salary after taxes in california/i })).toBeTruthy()
     expect(screen.getByText(formatMoney(expected.federalTax))).toBeTruthy()
     expect(screen.getByText(formatMoney(expected.fica))).toBeTruthy()
     expect(screen.getByText(formatMoney(expected.stateTax))).toBeTruthy()

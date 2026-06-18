@@ -73,6 +73,8 @@ describe('Results', () => {
     const status = screen.getByRole('status')
     expect(status.textContent).toContain('Take-home $2,000 per check')
     expect(status.textContent).toContain('$2,800 free 401k match')
+    expect(status.textContent).toContain('Roth target $583 per month')
+    expect(status.textContent).toContain('50/30/20 budget $2,166 needs, $1,300 wants, $866 savings')
     expect(screen.getByText(/free money/i)).toBeTruthy()
     expect(screen.getByText('$2,800')).toBeTruthy()
     expect(screen.getByText(/email me my plan/i)).toBeTruthy()

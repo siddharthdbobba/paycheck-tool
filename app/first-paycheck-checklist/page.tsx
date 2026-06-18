@@ -5,6 +5,7 @@ import Disclosure from '@/components/Disclosure'
 import EmailCapture from '@/components/EmailCapture'
 import { trackServer } from '@/lib/analytics-server'
 import { BRAND, LAST_REVIEWED } from '@/lib/copy'
+import { jsonLdScript } from '@/lib/json-ld'
 
 export const metadata: Metadata = {
   title: 'Your First Paycheck: Complete Checklist for 2026 — What to Do Step by Step',
@@ -43,7 +44,7 @@ export default async function FirstPaycheckGuidePage() {
     <div className="min-h-screen bg-zinc-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       <BreadcrumbJsonLd
         items={[

@@ -123,13 +123,6 @@ export const PRODUCTS: Product[] = [
     rating: 4.6, bestForTag: 'automatic investing', headlineStat: { value: '$3/mo', label: 'starter plan' }, ctaLabel: 'Invest my spare change',
   },
   {
-    id: 'investing-betterment', category: 'investing', name: 'Betterment',
-    blurb: 'Robo-advisor that builds and rebalances a portfolio for you.',
-    highlights: ['0.25% annual AUM fee', 'Automatic rebalancing', 'Tax-loss harvesting', 'Goal-based investing'],
-    affiliateUrl: 'https://AFFILIATE_REPLACE/betterment',
-    rating: 4.7, bestForTag: 'hands-off portfolios', headlineStat: { value: '0.25%', label: 'annual advisory fee' }, ctaLabel: 'Automate my investing',
-  },
-  {
     id: 'investing-m1', category: 'investing', name: 'M1 Finance',
     blurb: 'Build a custom "pie" of stocks and ETFs with automated investing.',
     highlights: ['No management fee', 'Customizable portfolio pies', 'Automated deposits & rebalancing', 'Fractional shares'],

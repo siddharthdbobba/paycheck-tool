@@ -28,6 +28,13 @@ export function buildShareUrl(): URL {
   return url
 }
 
+export function buildShareFooter(handle: string = BRAND.handle): string {
+  const trimmedHandle = handle.trim()
+  return !trimmedHandle || trimmedHandle === '@yourhandle'
+    ? BRAND.shareUrl
+    : `${trimmedHandle} • ${BRAND.shareUrl}`
+}
+
 export function buildShareCardCopy(result: PaycheckResult): ShareCardCopy {
   const hero = result.employerMatchDollars > 0 && result.recommended401kPercent > 0
     ? `I found ${usd(result.employerMatchDollars)}/yr in free 401k match`
@@ -42,7 +49,7 @@ export function buildShareCardCopy(result: PaycheckResult): ShareCardCopy {
       `Roth target: ${usd(result.rothMonthly)}/mo`,
       `50/30/20: ${usd(result.budget.needs)} needs • ${usd(result.budget.wants)} wants • ${usd(result.budget.savings)} savings`,
     ],
-    footer: `${BRAND.handle} • ${BRAND.shareUrl}`,
+    footer: buildShareFooter(),
     caption: 'Found out how much of my first paycheck I actually keep',
   }
 }

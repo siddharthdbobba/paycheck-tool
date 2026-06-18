@@ -1,3 +1,5 @@
+import { jsonLdScript } from '@/lib/json-ld'
+
 type BreadcrumbJsonLdItem = {
   name: string
   item: string
@@ -22,7 +24,7 @@ export default function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
     />
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { BRAND, LAST_REVIEWED } from '@/lib/copy'
+import { jsonLdScript } from '@/lib/json-ld'
 
 export const metadata: Metadata = {
   title: 'Methodology — Paycheck Tool',
@@ -29,7 +30,7 @@ export default function MethodologyPage() {
     <div className="bg-zinc-50 px-4 py-10">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       <article className="mx-auto max-w-3xl rounded-lg border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
         <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">

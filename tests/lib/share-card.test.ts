@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { PaycheckResult } from '@/lib/calc/types'
 import { BRAND } from '@/lib/copy'
-import { buildShareCardCopy, buildShareUrl } from '@/lib/share-card'
+import { buildShareCardCopy, buildShareFooter, buildShareUrl } from '@/lib/share-card'
 
 const baseResult: PaycheckResult = {
   takeHomeAnnual: 52_000,
@@ -29,8 +29,17 @@ describe('share-card copy', () => {
       'Roth target: $583/mo',
       '50/30/20: $2,166 needs • $1,300 wants • $866 savings',
     ])
-    expect(copy.footer).toBe(`${BRAND.handle} • ${BRAND.shareUrl}`)
+    expect(copy.footer).toBe(BRAND.shareUrl)
     expect(copy.caption).toBe('Found out how much of my first paycheck I actually keep')
+  })
+
+  it('omits placeholder and empty handles from the footer', () => {
+    expect(buildShareFooter('@yourhandle')).toBe(BRAND.shareUrl)
+    expect(buildShareFooter('')).toBe(BRAND.shareUrl)
+  })
+
+  it('keeps real handles in the footer', () => {
+    expect(buildShareFooter('@realhandle')).toBe(`@realhandle • ${BRAND.shareUrl}`)
   })
 
   it('falls back to take-home when employer match is zero', () => {

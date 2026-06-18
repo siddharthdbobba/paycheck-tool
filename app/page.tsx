@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Calculator from '@/components/Calculator'
 import { BRAND, LAST_REVIEWED } from '@/lib/copy'
+import { jsonLdScript } from '@/lib/json-ld'
 
 type HomeProps = {
   searchParams: Promise<{ hook?: string | string[] }>
@@ -70,7 +71,7 @@ export default async function Home({ searchParams }: HomeProps) {
     <div className="min-h-screen bg-zinc-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       <div id="calculator" className="mx-auto max-w-lg px-4 py-6">
         <div className="mb-5 text-center">
