@@ -45,9 +45,9 @@ export default async function FirstPaycheckGuidePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="mx-auto max-w-2xl px-4 py-10">
-        <article className="prose prose-zinc prose-sm max-w-none">
+        <article className="max-w-none text-sm leading-7 text-zinc-700 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:leading-tight [&_h1]:tracking-tight [&_h1]:text-zinc-950 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-zinc-950 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5 [&_p]:mt-4 [&_strong]:font-semibold [&_strong]:text-zinc-950 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
           <h1>Your First Paycheck: The Complete New Grad Checklist (2026)</h1>
-          <p className="lead text-zinc-500">
+          <p className="mt-4 text-base leading-7 text-zinc-600">
             You got the job. You signed the offer. Now your first paycheck is about to hit your bank
             account — and you have no idea what to do with it. This guide walks you through every
             step, in order, so you don't leave money on the table.
@@ -194,7 +194,7 @@ export default async function FirstPaycheckGuidePage() {
             <li><strong>Paying for financial advice.</strong> You don't need a $3,000 course. Index funds + Roth IRA + 401k match = 90% of what matters.</li>
           </ul>
 
-          <div className="not-prose mt-10 rounded-lg border border-indigo-200 bg-indigo-50 p-6">
+          <div className="mt-10 rounded-lg border border-indigo-200 bg-indigo-50 p-6">
             <h3 className="text-base font-semibold text-indigo-900">Run Your Numbers</h3>
             <p className="mt-1 text-sm text-indigo-700">
               See your actual take-home pay, 401k match, Roth IRA target, and budget — personalized
@@ -208,7 +208,7 @@ export default async function FirstPaycheckGuidePage() {
             </Link>
           </div>
 
-          <div className="not-prose mt-6">
+          <div className="mt-6">
             <EmailCapture />
           </div>
 

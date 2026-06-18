@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PaycheckResult, Product } from '@/lib/calc/types'
 import { LAST_REVIEWED } from '@/lib/copy'
 import { buildShareCardCopy, buildShareUrl, createShareCardFile } from '@/lib/share-card'
@@ -9,6 +9,8 @@ import Disclosure from './Disclosure'
 import ProductCard from './ProductCard'
 import EmailCapture from './EmailCapture'
 import HowWeCalculate from './HowWeCalculate'
+import RankingMethodology from './RankingMethodology'
+import { usePrefersReducedMotion } from './usePrefersReducedMotion'
 
 interface ResultsProps {
   result: PaycheckResult
@@ -25,40 +27,26 @@ function usd(amount: number): string {
   }).format(amount)
 }
 
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false)
+function useCountUpText(value: number, formatter: (amount: number) => string) {
+  const nodeRef = useRef<HTMLSpanElement>(null)
+  const previousValue = useRef(value)
+  const reducedMotion = usePrefersReducedMotion()
+  const formattedValue = formatter(value)
 
   useEffect(() => {
-    if (!window.matchMedia) {
+    const node = nodeRef.current
+
+    if (!node) {
       return
     }
 
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReduced(media.matches)
-
-    function handleChange(event: MediaQueryListEvent) {
-      setReduced(event.matches)
-    }
-
-    media.addEventListener('change', handleChange)
-    return () => media.removeEventListener('change', handleChange)
-  }, [])
-
-  return reduced
-}
-
-function useCountUp(value: number): number {
-  const [displayValue, setDisplayValue] = useState(value)
-  const previousValue = useRef(value)
-  const reducedMotion = usePrefersReducedMotion()
-
-  useEffect(() => {
     if (reducedMotion || previousValue.current === value) {
-      setDisplayValue(value)
+      node.textContent = formatter(value)
       previousValue.current = value
       return
     }
 
+    const animationNode = node
     const start = previousValue.current
     const difference = value - start
     const duration = 800
@@ -68,29 +56,40 @@ function useCountUp(value: number): number {
     function tick(now: number) {
       const progress = Math.min((now - startTime) / duration, 1)
       const eased = 1 - (1 - progress) ** 3
-      setDisplayValue(start + difference * eased)
+      animationNode.textContent = formatter(start + difference * eased)
 
       if (progress < 1) {
         frameId = requestAnimationFrame(tick)
       } else {
         previousValue.current = value
+        animationNode.textContent = formatter(value)
       }
     }
 
     frameId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frameId)
-  }, [reducedMotion, value])
+  }, [formatter, reducedMotion, value])
 
-  return displayValue
+  return { nodeRef, formattedValue }
 }
 
 function AnimatedMoney({ amount, suffix = '' }: { amount: number; suffix?: string }) {
+  const formatter = useMemo(() => (value: number) => `${usd(value)}${suffix}`, [suffix])
+  const { nodeRef, formattedValue } = useCountUpText(amount, formatter)
+
   return (
-    <span className="tabular-nums">
-      {usd(useCountUp(amount))}
-      {suffix && <span className="text-base font-normal text-zinc-600">{suffix}</span>}
+    <span
+      ref={nodeRef}
+      className={`tabular-nums ${suffix ? 'text-inherit' : ''}`}
+      aria-hidden="true"
+    >
+      {formattedValue}
     </span>
   )
+}
+
+function buildLiveSummary(result: PaycheckResult): string {
+  return `Take-home ${usd(result.takeHomePerCheck)} per check; ${usd(result.employerMatchDollars)} free 401k match.`
 }
 
 type StickyResultCtaProps = {
@@ -106,10 +105,13 @@ export function StickyResultCta({ hasResult, isHidden, targetId }: StickyResultC
 
   function handleClick() {
     const target = document.getElementById(targetId)
-    target?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-    target?.focus({ preventScroll: true })
     const input = target?.querySelector('input')
-    input?.focus({ preventScroll: true })
+    target?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    if (input instanceof HTMLInputElement) {
+      input.focus({ preventScroll: true })
+    } else {
+      target?.focus({ preventScroll: true })
+    }
   }
 
   return (
@@ -122,7 +124,9 @@ export function StickyResultCta({ hasResult, isHidden, targetId }: StickyResultC
         <button
           type="button"
           onClick={handleClick}
-          className="flex min-h-12 w-full items-center justify-center rounded-md bg-zinc-950 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-zinc-800"
+          disabled={isHidden}
+          tabIndex={isHidden ? -1 : 0}
+          className="flex min-h-12 w-full items-center justify-center rounded-md bg-indigo-700 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
           Get my full breakdown →
         </button>
@@ -142,6 +146,8 @@ export default function Results({ result, products, shouldFocus = false }: Resul
   const headingRef = useRef<HTMLHeadingElement>(null)
   const hasFocused = useRef(false)
   const [isSharing, setIsSharing] = useState(false)
+  const [isEmailOffscreen, setIsEmailOffscreen] = useState(false)
+  const [liveSummary, setLiveSummary] = useState(() => buildLiveSummary(result))
   const shareCopy = buildShareCardCopy(result)
   const shareUrl = buildShareUrl()
 
@@ -154,6 +160,30 @@ export default function Results({ result, products, shouldFocus = false }: Resul
     headingRef.current?.focus({ preventScroll: true })
     headingRef.current?.scrollIntoView?.({ block: 'start', behavior: 'smooth' })
   }, [shouldFocus])
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setLiveSummary(buildLiveSummary(result))
+    }, 400)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [result])
+
+  useEffect(() => {
+    const emailCapture = document.getElementById('email-capture')
+
+    if (!emailCapture || typeof IntersectionObserver === 'undefined') {
+      setIsEmailOffscreen(false)
+      return
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsEmailOffscreen(!entry.isIntersecting)
+    }, { threshold: 0.1 })
+
+    observer.observe(emailCapture)
+    return () => observer.disconnect()
+  }, [])
 
   async function handleShare() {
     setIsSharing(true)
@@ -190,7 +220,10 @@ export default function Results({ result, products, shouldFocus = false }: Resul
   }
 
   return (
-    <div role="status" aria-live="polite" aria-atomic="true" className="mt-6 min-h-[640px] space-y-6 pb-24">
+    <div className="mt-6 min-h-[720px] space-y-6 pb-28">
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveSummary}
+      </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
@@ -204,7 +237,7 @@ export default function Results({ result, products, shouldFocus = false }: Resul
           type="button"
           onClick={handleShare}
           disabled={isSharing}
-          className="inline-flex min-h-12 items-center justify-center rounded-md bg-emerald-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
+          className="inline-flex min-h-12 items-center justify-center rounded-md bg-emerald-700 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-emerald-800 disabled:opacity-60"
         >
           {isSharing ? 'Preparing...' : 'Share my result'}
         </button>
@@ -232,7 +265,7 @@ export default function Results({ result, products, shouldFocus = false }: Resul
       {/* Roth IRA */}
       <div className="rounded-lg border border-zinc-300 bg-white p-4 shadow-sm">
         <p className="text-sm font-medium uppercase tracking-wide text-zinc-600">Roth IRA monthly target</p>
-        <p className="mt-1 text-2xl font-bold text-zinc-950">
+          <p className="mt-1 text-2xl font-bold text-zinc-950">
           <AnimatedMoney amount={rothMonthly} suffix="/mo" />
         </p>
       </div>
@@ -272,6 +305,7 @@ export default function Results({ result, products, shouldFocus = false }: Resul
       {products.length > 0 && (
         <div className="space-y-4">
           <Disclosure />
+          <RankingMethodology />
           <p className="text-sm font-semibold uppercase tracking-wide text-zinc-700">Recommended Accounts</p>
           {products.map((product, index) => (
             <ProductCard key={product.id} product={product} isTopPick={index === 0} />
@@ -284,7 +318,7 @@ export default function Results({ result, products, shouldFocus = false }: Resul
         <Disclaimer />
       </div>
 
-      <StickyResultCta hasResult isHidden={isSharing} targetId="email-capture" />
+      <StickyResultCta hasResult isHidden={isSharing || !isEmailOffscreen} targetId="email-capture" />
     </div>
   )
 }

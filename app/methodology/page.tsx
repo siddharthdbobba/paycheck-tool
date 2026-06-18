@@ -26,7 +26,7 @@ const jsonLd = {
 
 export default function MethodologyPage() {
   return (
-    <main className="bg-zinc-50 px-4 py-10">
+    <div className="bg-zinc-50 px-4 py-10">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
@@ -94,6 +94,6 @@ export default function MethodologyPage() {
           </p>
         </section>
       </article>
-    </main>
+    </div>
   )
 }

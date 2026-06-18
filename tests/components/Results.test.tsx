@@ -29,7 +29,6 @@ const sampleProducts: Product[] = [
     blurb: 'High-yield savings with no account fees.',
     highlights: ['Competitive APY', 'No monthly fee'],
     affiliateUrl: 'https://example.com/sofi',
-    payoutNote: '~$20-75 funded',
     rating: 4.8,
     bestForTag: 'starter emergency funds',
     headlineStat: { value: '4.0% APY', label: 'high-yield savings' },
@@ -43,7 +42,6 @@ const sampleProducts: Product[] = [
     blurb: 'Open a Roth IRA with no minimum and low-cost index funds.',
     highlights: ['No account fees', 'Great index funds'],
     affiliateUrl: 'https://example.com/fidelity',
-    payoutNote: 'varies',
     rating: 4.9,
     bestForTag: 'first Roth IRA',
     headlineStat: { value: '$0', label: 'account minimum' },
@@ -73,7 +71,8 @@ describe('Results', () => {
     render(<Results result={sampleResult} products={sampleProducts} />)
 
     const status = screen.getByRole('status')
-    expect(status.getAttribute('aria-live')).toBe('polite')
+    expect(status.textContent).toContain('Take-home $2,000 per check')
+    expect(status.textContent).toContain('$2,800 free 401k match')
     expect(screen.getByText(/free money/i)).toBeTruthy()
     expect(screen.getByText('$2,800')).toBeTruthy()
     expect(screen.getByText(/email me my plan/i)).toBeTruthy()
@@ -91,8 +90,6 @@ describe('Results', () => {
     const recommendations = screen.getByText(/recommended accounts/i)
 
     expect(disclosure.compareDocumentPosition(recommendations) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(screen.queryByText('~$20-75 funded')).toBeNull()
-    expect(screen.queryByText('varies')).toBeNull()
   })
 
   it('renders conversion and trust details for recommended products', () => {
@@ -108,6 +105,7 @@ describe('Results', () => {
     expect(screen.getByText(/2026 tax year/i)).toBeTruthy()
     expect(screen.getByText(/^IRS:/i)).toBeTruthy()
     expect(screen.getByText(/^SSA:/i)).toBeTruthy()
+    expect(screen.getByText(/how we rank these picks/i)).toBeTruthy()
   })
 
   it('renders share and freshness controls near the result', () => {
@@ -125,5 +123,13 @@ describe('Results', () => {
     rerender(<StickyResultCta hasResult isHidden={false} targetId="email-capture" />)
 
     expect(screen.getByRole('button', { name: /get my full breakdown/i })).toBeTruthy()
+  })
+
+  it('removes hidden sticky CTA from the keyboard order', () => {
+    render(<StickyResultCta hasResult isHidden targetId="email-capture" />)
+
+    const button = screen.getByRole('button', { name: /get my full breakdown/i, hidden: true })
+    expect(button.getAttribute('tabindex')).toBe('-1')
+    expect(button.hasAttribute('disabled')).toBe(true)
   })
 })

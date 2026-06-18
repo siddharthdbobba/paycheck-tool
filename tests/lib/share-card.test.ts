@@ -23,7 +23,7 @@ describe('share-card copy', () => {
   it('builds the employer-match hero and supporting result lines', () => {
     const copy = buildShareCardCopy(baseResult)
 
-    expect(copy.hero).toBe("I'm leaving $2,800/yr in free 401k match on the table")
+    expect(copy.hero).toBe('I found $2,800/yr in free 401k match')
     expect(copy.supporting).toEqual([
       'Take-home: $2,000/check',
       'Roth target: $583/mo',
@@ -37,6 +37,12 @@ describe('share-card copy', () => {
     const copy = buildShareCardCopy({ ...baseResult, employerMatchDollars: 0 })
 
     expect(copy.hero).toBe('My real take-home: $2,000/check')
+  })
+
+  it('uses leaving-on-the-table framing only when the user is not contributing', () => {
+    const copy = buildShareCardCopy({ ...baseResult, recommended401kPercent: 0 })
+
+    expect(copy.hero).toBe("I'm leaving $2,800/yr in free 401k match on the table")
   })
 
   it('adds the Instagram-share UTM source to the share URL', () => {

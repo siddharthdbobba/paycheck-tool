@@ -38,6 +38,9 @@ export async function generateMetadata({ searchParams }: HomeProps): Promise<Met
   return {
     title: hook.title,
     description: hook.description,
+    alternates: {
+      canonical: BRAND.shareUrl,
+    },
     openGraph: {
       title: hook.title,
       description: hook.description,
@@ -69,7 +72,7 @@ export default async function Home({ searchParams }: HomeProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="mx-auto max-w-lg px-4 py-6">
+      <div className="mx-auto max-w-lg px-4 py-6">
         <div className="mb-5 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl">
             {hook.headline}
@@ -79,7 +82,7 @@ export default async function Home({ searchParams }: HomeProps) {
           </p>
         </div>
         <Calculator />
-      </main>
+      </div>
     </div>
   )
 }

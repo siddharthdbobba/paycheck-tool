@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function EditorialStandardsPage() {
   return (
-    <main className="bg-zinc-50 px-4 py-10">
+    <div className="bg-zinc-50 px-4 py-10">
       <article className="mx-auto max-w-3xl rounded-lg border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
         <p className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
           {LAST_REVIEWED.label}
@@ -53,6 +53,6 @@ export default function EditorialStandardsPage() {
           </p>
         </section>
       </article>
-    </main>
+    </div>
   )
 }

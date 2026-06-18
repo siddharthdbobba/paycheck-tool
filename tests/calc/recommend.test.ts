@@ -12,10 +12,11 @@ describe('rankProducts', () => {
   })
 
   it('prioritizes cash and credit building when there is no employer match', () => {
-    const r = rankProducts({ ...input, grossAnnual: 42_000, state: 'TX', matchPercent: 0, matchLimitPercent: 0 })
+    const r = rankProducts({ ...input, grossAnnual: 42_000, state: 'IN', matchPercent: 0, matchLimitPercent: 0 })
     expect(r.map((p) => p.category)).toEqual(['savings', 'card', 'brokerage'])
     expect(r[0].reason).toContain('emergency fund')
-    expect(r[1].reason).toContain('Texas')
+    expect(r[1].reason).toContain('Indiana')
+    expect(r[1].reason).not.toContain('IN paycheck')
   })
 })
 

@@ -24,6 +24,9 @@ describe('/', () => {
       generateMetadata({ searchParams: Promise.resolve({ hook: 'budget' }) }),
     ).resolves.toMatchObject({
       title: expect.stringContaining('first salary'),
+      alternates: {
+        canonical: 'https://paycheck-tool-faceless1.vercel.app',
+      },
       openGraph: {
         description: expect.stringContaining('monthly budget'),
       },

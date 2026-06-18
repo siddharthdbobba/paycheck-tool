@@ -29,7 +29,6 @@ export interface Product {
   blurb: string
   highlights: string[]
   affiliateUrl: string
-  payoutNote: string
   rating: number
   bestForTag: string
   headlineStat: {

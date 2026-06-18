@@ -35,7 +35,6 @@ describe('/best/[slug]', () => {
     expect(screen.getAllByText(COPY.disclosure).length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText(categoryProducts[0].name).length).toBeTruthy()
     expect(screen.queryByText(excludedProduct.name)).toBeNull()
-    expect(screen.queryByText(categoryProducts[0].payoutNote)).toBeNull()
     expect(screen.getByText(/how we rank these picks/i)).toBeTruthy()
     expect(screen.getByText(/fees, eligibility, APY or rewards value/i)).toBeTruthy()
     expect(screen.getByText(/updated 2026/i)).toBeTruthy()

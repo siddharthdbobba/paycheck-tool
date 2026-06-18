@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import Calculator from '@/components/Calculator'
 
@@ -22,9 +22,12 @@ describe('Calculator', () => {
 
     fireEvent.change(salary, { target: { value: '90000' } })
     fireEvent.change(state, { target: { value: 'TX' } })
-    vi.advanceTimersByTime(250)
+    act(() => {
+      vi.advanceTimersByTime(250)
+    })
 
-    expect(screen.getByRole('status').textContent).toContain('Take-home per paycheck')
+    expect(screen.getByRole('heading', { name: /your real paycheck/i })).toBeTruthy()
+    expect(screen.getByText(/take-home per paycheck/i)).toBeTruthy()
   })
 
   it('uses a single 401k match preset unless custom is selected', () => {
@@ -48,7 +51,9 @@ describe('Calculator', () => {
     expect(screen.getByText(/we never see or store your salary/i)).toBeTruthy()
 
     fireEvent.change(screen.getByLabelText(/gross annual salary/i), { target: { value: '' } })
-    vi.advanceTimersByTime(250)
+    act(() => {
+      vi.advanceTimersByTime(250)
+    })
 
     expect(screen.getByText(/enter your salary to see your numbers/i)).toBeTruthy()
   })

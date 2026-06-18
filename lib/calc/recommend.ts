@@ -3,6 +3,7 @@ import { takeHome } from './tax'
 import { match401k, rothTarget } from './retirement'
 import { budgetSplit } from './budget'
 import { productsForCategory } from '@/lib/data/products'
+import { STATE_NAMES } from '@/lib/data/states'
 
 const PER_YEAR = { weekly: 52, biweekly: 26, semimonthly: 24, monthly: 12 } as const
 type ScoredProduct = Product & { reason: string; score: number }
@@ -13,9 +14,6 @@ type ScoredProduct = Product & { reason: string; score: number }
 // homepage — but rankProducts falls back to the first product per category and
 // drops any category that has no products yet, so extending this list is safe.
 const RANKED_CATEGORIES: Product['category'][] = ['savings', 'brokerage', 'card']
-const STATE_NAMES: Record<string, string> = {
-  TX: 'Texas',
-}
 
 function usd(amount: number): string {
   return new Intl.NumberFormat('en-US', {
@@ -31,7 +29,7 @@ export function rankProducts(input: PaycheckInput): Product[] {
   const monthlyTakeHome = takeHomeAnnual / 12
   const matchDollars = match.employerDollars
   const noIncomeTaxState = new Set(['AK', 'FL', 'NV', 'NH', 'SD', 'TN', 'TX', 'WA', 'WY']).has(input.state)
-  const stateName = STATE_NAMES[input.state] ?? input.state
+  const stateName = STATE_NAMES[input.state] ?? 'your state'
 
   return RANKED_CATEGORIES
     .map((category) => {

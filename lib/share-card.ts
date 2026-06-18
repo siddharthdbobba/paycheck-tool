@@ -29,8 +29,10 @@ export function buildShareUrl(): URL {
 }
 
 export function buildShareCardCopy(result: PaycheckResult): ShareCardCopy {
-  const hero = result.employerMatchDollars > 0
-    ? `I'm leaving ${usd(result.employerMatchDollars)}/yr in free 401k match on the table`
+  const hero = result.employerMatchDollars > 0 && result.recommended401kPercent > 0
+    ? `I found ${usd(result.employerMatchDollars)}/yr in free 401k match`
+    : result.employerMatchDollars > 0
+      ? `I'm leaving ${usd(result.employerMatchDollars)}/yr in free 401k match on the table`
     : `My real take-home: ${usd(result.takeHomePerCheck)}/check`
 
   return {
